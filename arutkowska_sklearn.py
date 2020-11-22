@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 from sklearn.datasets import make_classification
 from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
@@ -18,22 +15,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-
-# In[2]:
-
-
 X, y = make_classification(n_samples=1000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2)
-
-
-# In[3]:
-
 
 plt.scatter(X[:,0], X[:,1], c=y, s=4) # s - rozmiar kropek 
 plt.show()
-
-
-# In[4]:
-
 
 classifiers = {
     "Gaussian" : GaussianNB(),
@@ -42,10 +27,6 @@ classifiers = {
     "SVC" : SVC(probability=True),
     "Tree" : DecisionTreeClassifier()
 }
-
-
-# In[5]:
-
 
 iter = 100
 accuracy = []
@@ -94,10 +75,6 @@ df = pd.DataFrame({"clfs": clfs, "Accuracy": accuracy, "Recall": recall, "Precis
     "Training time": t_fit, "Testing time": t_predict})
 df.groupby(["clfs"]).mean()
 
-
-# In[6]:
-
-
 classifiers2 = {
     'Gaussian' : GaussianNB(),
 #     'QDA' : QuadraticDiscriminantAnalysis(),
@@ -105,10 +82,6 @@ classifiers2 = {
     'SVC' : SVC(probability=True),
     'Tree' : DecisionTreeClassifier()
 }
-
-
-# In[7]:
-
 
 parameters = {
     'Gaussian': {
@@ -143,10 +116,6 @@ parameters = {
     }
 }
 
-
-# In[8]:
-
-
 scoring = {'AUC': 'roc_auc', 'Accuracy': metrics.make_scorer(metrics.accuracy_score)}
 best = []
 
@@ -160,10 +129,6 @@ for clfname in classifiers2.keys():
                                    return_train_score=True)
             clf_par.fit(X, y) 
             best.append(clf_par.best_params_)
-
-
-# In[9]:
-
 
 classifiers3 = {
     "Gaussian" : GaussianNB(priors=best[0]['priors'],
@@ -183,10 +148,6 @@ classifiers3 = {
                                     min_samples_leaf=best[3]['min_samples_leaf'],
                                     splitter=best[3]['splitter'])
 }
-
-
-# In[10]:
-
 
 iter = 100
 accuracy = []
@@ -234,4 +195,3 @@ for i in range(iter):
 df = pd.DataFrame({"clfs": clfs, "Accuracy": accuracy, "Recall": recall, "Precision": precision, "F1": F1, "ROC": roc, \
     "Training time": t_fit, "Testing time": t_predict})
 df.groupby(["clfs"]).mean()
-
